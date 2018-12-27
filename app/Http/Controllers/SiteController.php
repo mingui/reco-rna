@@ -61,11 +61,20 @@ class SiteController extends Controller
 
     public function guardar_busqueda($request, $libro_id=null, $ranking=null){
 
-        $data = new Busquedas();
-        $data->user_id = Auth::user()->id;
-        $data->tema    = $request->q;
-        $data->save();
-        return $data->id;
+        $actual = Busquedas::where('user_id', Auth::user()->id)
+                            ->where('tema', $request->q)
+                            ->whereBetween('created_at', [ date('Y-m-d'). ' 00:00:00', date('Y-m-d'). ' 23:59:59'   ])
+                            ->count();
+
+        if(!$actual > 0){
+            $data = new Busquedas();
+            $data->user_id = Auth::user()->id;
+            $data->tema    = $request->q;
+            $data->save();
+            return $data->id;
+        }
+
+        return 0;
 
     }
 
@@ -79,7 +88,7 @@ class SiteController extends Controller
         $data->libro_id = $request->libro_id;
         $data->ranking    = $request->ranking;
         if($data->save()){
-            session('success', 'Gracias por tu calificacion :)');
+            session()->flash('success', 'Gracias por tu calificacion :)');
 
         }
 

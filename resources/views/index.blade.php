@@ -114,6 +114,7 @@
                     <table class="table table-striped table-hover" width="100%">
                        <thead>
                        <tr>
+                           <th>ID</th>
                            <th>Titulo</th>
                            <th>Autor(es)</th>
                            <th>Volumen</th>
@@ -125,10 +126,13 @@
                         <tbody>
                             @foreach($data as $file)
                                 <tr>
+                                    <td>{{ $file->id }}</td>
                                     <td>{{ $file->titulo }}</td>
                                     <td>{{ $file->autor1 }} {{ $file->autor2 }}</td>
                                     <td width="10px text-center">{{ $file->volumen }}</td>
-                                    <td width="10px text-center"></td>
+                                    <td width="10px text-center">
+                                        {{ get_ranking_medio($file->id) }}
+                                    </td>
                                     <td width="30px text-center">
                                         @if($busqueda_id > 0)
                                         {!! Form::open(['route'=>'calificar', 'method'=>'POST']) !!}
