@@ -23,6 +23,7 @@ Route::post('/calificar', 'SiteController@calificar')->name('calificar');
 
 Route::resource('/plan_estudio', 'PlanEstudioController');
 Route::resource('/asignatura', 'AsignaturaController');
+Route::resource('/contenido', 'ContenidoController');
 
 
 

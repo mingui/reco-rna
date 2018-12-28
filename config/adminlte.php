@@ -123,6 +123,11 @@ return [
             'text'        => 'Asignatura',
             'url'         => 'asignatura',
             'icon'        => 'file'
+        ],
+        [
+            'text'        => 'Contenido',
+            'url'         => 'contenido',
+            'icon'        => 'file'
         ]
     ],
 
