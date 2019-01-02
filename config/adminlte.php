@@ -128,6 +128,11 @@ return [
             'text'        => 'Contenido',
             'url'         => 'contenido',
             'icon'        => 'file'
+        ],
+        [
+            'text'        => 'Bibliografia',
+            'url'         => 'bibliografia',
+            'icon'        => 'file'
         ]
     ],
 
