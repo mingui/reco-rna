@@ -25,15 +25,15 @@
             {!! Form::open(['route'=>$ruta.'.store', 'method'=>'POST']) !!}
 
 
-            <div class="form-group col-xs-5">
-            {!!Form::label('Bibliografia')!!}
-                {!!Form::text('titulo',null,['id'=>'bibliografia_id','class'=>'form-control ', 'required'])!!}
+            <div class="form-group col-xs-6">
+            {!!Form::label('Libro')!!}
+                {!! Form::select('bibliografia_id', $titulo, null, ['class'=> 'form-control'])  !!}
             </div>
 
 
-            <div class="form-group col-xs-2">
+            <div class="form-group col-xs-6">
             {!!Form::label('Tema')!!}
-                {!!Form::text('tema',null,['id'=>'contenido_id','class'=>'form-control ', 'required'])!!}
+                {!! Form::select('contenido_id', $tema, null, ['class'=> 'form-control'])  !!}
             </div>
 
         

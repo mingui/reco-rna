@@ -26,6 +26,9 @@
                 <tr>
                 <th>ID</th>
                 <th>TITULO</th>
+                <th>AUTOR 1</th>
+                <th>AUTOR 2</th>
+                <th>VOLUMEN</th>
                 <th width="50px"><i class="fa fa-gear"></i></th>
                 </tr>
 
@@ -34,6 +37,9 @@
                     <tr>
                         <td>{{ $file->id }}</td>
                         <td>{{ $file->titulo }}</td>
+                        <td>{{ $file->autor1 }}</td>
+                        <td>{{ $file->autor2 }}</td>
+                        <td>{{ $file->volumen }}</td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route($ruta.'.edit', $file->id) }}"><i class="fa fa-edit"></i> </a>

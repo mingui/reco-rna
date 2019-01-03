@@ -26,9 +26,24 @@
 
 
             <div class="form-group col-xs-5">
-                {!!Form::label('Nombres')!!}
+                {!!Form::label('Titulo')!!}
                 {!!Form::text('titulo',null,['id'=>'titulo','class'=>'form-control ', 'required'])!!}
             </div>
+            <div class="form-group col-xs-5">
+                {!!Form::label('Autor 1')!!}
+                {!!Form::text('autor1',null,['id'=>'autor1','class'=>'form-control ', 'required'])!!}
+            </div>
+           
+            <div class="form-group col-xs-5">
+                {!!Form::label('Autor 2')!!}
+                {!!Form::text('autor2',null,['id'=>'autor2','class'=>'form-control ', 'required'])!!}
+            </div>
+
+            <div class="form-group col-xs-2">
+                {!!Form::label('Volumen')!!}
+                {!!Form::number('volumen',null,['id'=>'volumen','class'=>'form-control ', 'required'])!!}
+            </div>
+
 
 
 

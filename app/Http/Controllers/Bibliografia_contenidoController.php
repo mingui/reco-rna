@@ -37,10 +37,10 @@ class Bibliografia_contenidoController extends Controller
 
         $title = $this->module;
         $ruta = $this->route;
-       // $bibliografia = Bibliografia::pluck('bibliografia as name', 'id');
-        //$contenido = Contenido::pluck('contenido as name', 'id');
+        $titulo = Bibliografia::pluck('titulo as name', 'id');
+        $tema = Contenido::pluck('tema as name', 'id');
 
-        return view($this->folder.'.create', compact('title', 'ruta', 'request', 'contenido'));
+        return view($this->folder.'.create', compact('title', 'ruta', 'request', 'titulo','tema'));
     }
 
 
@@ -73,10 +73,10 @@ class Bibliografia_contenidoController extends Controller
         $title = $this->module;
         $data = Bibliografia_contenido::Find($id);
         $ruta = $this->route;
-        //$bibliografia = Bibliografia::pluck('bibliografia as name', 'id');
-        //$contenido = Contenido::pluck('contenido as name', 'id');
+        $titulo = Bibliografia::pluck('titulo as name', 'id');
+        $tema = Contenido::pluck('tema as name', 'id');
 
-        return view($this->folder.'.edit', compact('title', 'data', 'ruta', 'request', 'contenido'));
+        return view($this->folder.'.edit', compact('title', 'data', 'ruta', 'request', 'titulo', 'tema'));
     }
 
 

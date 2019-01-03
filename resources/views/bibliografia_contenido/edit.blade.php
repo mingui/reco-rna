@@ -24,15 +24,15 @@
         <div class="box-body">
             {{ Form::model($data, ['route' => [$ruta.'.update', $data->id], 'method' => 'patch']) }}
 
-            <div class="form-group col-xs-5">
-            {!!Form::label('Bibliografia')!!}
-                {!! Form::select('bibliografia_id', $bibliografia, null, ['class'=> 'form-control'])  !!}
+            <div class="form-group col-xs-6">
+            {!!Form::label('Libro')!!}
+                {!! Form::select('bibliografia_id', $titulo, null, ['class'=> 'form-control'])  !!}
             </div>
 
 
-            <div class="form-group col-xs-2">
+            <div class="form-group col-xs-6">
             {!!Form::label('Tema')!!}
-                {!! Form::select('contenido_id', $contenido, null, ['class'=> 'form-control'])  !!}
+                {!! Form::select('contenido_id', $tema, null, ['class'=> 'form-control'])  !!}
             </div>
 
 
