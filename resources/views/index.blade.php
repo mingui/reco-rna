@@ -98,7 +98,7 @@
                 <div class="col">
                     <form method="get">
                         <div class="form-group">
-                            <label for="Buscar libro">Buscar libro</label>
+                            <label for="Buscar libro">Buscar libro </label>
                             <input type="text" name="q" value="{{ $request->q }}" required class="form-control col-12">
                             <br>
                             <button type="submit" class="btn btn-primary pull-right">Buscar</button>
