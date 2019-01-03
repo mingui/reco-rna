@@ -26,12 +26,12 @@
 
             <div class="form-group col-xs-5">
                 {!!Form::label('Borrar este registro')!!}
-                {!!Form::text('plan',null,['id'=>'plan','class'=>'form-control ', 'required'])!!}
+                {!!Form::text('titulo',null,['id'=>'titulo','class'=>'form-control ', 'required'])!!}
             </div>
 
 
             <div class="clearfix"></div>
-            {!!Form::submit('Eliminar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
+            {!!Form::submit('Guardar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
             {!! Form::close() !!}
         </div>
 

@@ -5,7 +5,7 @@
  * Date: 12/22/18
  * Time: 5:42 PM
  */
-?>
+ ?>
 
 @extends('adminlte::page')
 
@@ -22,19 +22,23 @@
             <a href="{{ route($ruta.'.index') }}" class="btn btn-primary  pull-right"><i class="fa fa-list"></i> Volver</a>
         </div>
         <div class="box-body">
-            {{ Form::model($data, ['route' => [$ruta.'.update', $data->id], 'method' => 'delete']) }}
+            {!! Form::open(['route'=>$ruta.'.store', 'method'=>'POST']) !!}
+
 
             <div class="form-group col-xs-5">
-                {!!Form::label('Borrar este registro')!!}
-                {!!Form::text('plan',null,['id'=>'plan','class'=>'form-control ', 'required'])!!}
+                {!!Form::label('Nombres')!!}
+                {!!Form::text('titulo',null,['id'=>'titulo','class'=>'form-control ', 'required'])!!}
             </div>
 
 
+
             <div class="clearfix"></div>
-            {!!Form::submit('Eliminar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
+            {!!Form::submit('Guardar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
+
+
             {!! Form::close() !!}
         </div>
 
-    </div>
+</div>
 
 @stop
