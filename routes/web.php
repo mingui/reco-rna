@@ -25,6 +25,7 @@ Route::resource('/plan_estudio', 'PlanEstudioController');
 Route::resource('/asignatura', 'AsignaturaController');
 Route::resource('/contenido', 'ContenidoController');
 Route::resource('/bibliografia', 'BibliografiaController');
+Route::resource('/bibliografia_contenido', 'Bibliografia_contenidoController');
 
 
 

@@ -133,7 +133,13 @@ return [
             'text'        => 'Bibliografia',
             'url'         => 'bibliografia',
             'icon'        => 'file'
+        ],
+        [
+            'text'        => 'Bibliografia/Contenido',
+            'url'         => 'bibliografia_contenido',
+            'icon'        => 'file'
         ]
+        
     ],
 
     /*
