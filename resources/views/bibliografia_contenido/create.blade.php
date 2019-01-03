@@ -27,13 +27,13 @@
 
             <div class="form-group col-xs-5">
             {!!Form::label('Bibliografia')!!}
-                {!! Form::select('bibliografia_id', $bibliografia, null, ['class'=> 'form-control'])  !!}
+                {!!Form::text('titulo',null,['id'=>'bibliografia_id','class'=>'form-control ', 'required'])!!}
             </div>
 
 
             <div class="form-group col-xs-2">
             {!!Form::label('Tema')!!}
-                {!! Form::select('contenido_id', $contenido, null, ['class'=> 'form-control'])  !!}
+                {!!Form::text('tema',null,['id'=>'contenido_id','class'=>'form-control ', 'required'])!!}
             </div>
 
         

@@ -25,7 +25,7 @@ class Bibliografia_contenidoController extends Controller
 
 
         $title = $this->module;
-        $data = Bibliografia_contenido::orderBy('bibliografia_id')->paginate($this->pag);
+        $data = Bibliografia_contenido::orderBy('id')->paginate($this->pag);
         $ruta = $this->route;
 
         return view($this->folder.'.index', compact('title', 'data', 'ruta', 'request'));
@@ -37,8 +37,8 @@ class Bibliografia_contenidoController extends Controller
 
         $title = $this->module;
         $ruta = $this->route;
-        $bibliografia = Bibliografia::pluck('bibliografia as name', 'id');
-        $contenido = Contenido::pluck('contenido as name', 'id');
+       // $bibliografia = Bibliografia::pluck('bibliografia as name', 'id');
+        //$contenido = Contenido::pluck('contenido as name', 'id');
 
         return view($this->folder.'.create', compact('title', 'ruta', 'request', 'contenido'));
     }
@@ -73,8 +73,8 @@ class Bibliografia_contenidoController extends Controller
         $title = $this->module;
         $data = Bibliografia_contenido::Find($id);
         $ruta = $this->route;
-        $bibliografia = Bibliografia::pluck('bibliografia as name', 'id');
-        $contenido = Contenido::pluck('contenido as name', 'id');
+        //$bibliografia = Bibliografia::pluck('bibliografia as name', 'id');
+        //$contenido = Contenido::pluck('contenido as name', 'id');
 
         return view($this->folder.'.edit', compact('title', 'data', 'ruta', 'request', 'contenido'));
     }

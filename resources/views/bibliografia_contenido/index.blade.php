@@ -34,8 +34,8 @@
                 @foreach($data as $file)
                     <tr>
                         <td>{{ $file->id }}</td>
-                        <td>{{ $file->bibliografia_id }}</td>
-                        <td>{{ $file->contenido_id }}</td>
+                        <td>{{ $file->bibliografias->titulo }}</td>
+                        <td>{{ $file->contenidos->tema }}</td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route($ruta.'.edit', $file->id) }}"><i class="fa fa-edit"></i> </a>

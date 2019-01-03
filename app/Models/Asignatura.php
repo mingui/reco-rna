@@ -11,4 +11,9 @@ class Asignatura extends Model
     protected $guarded= ['_token', 'salir' ]; // every field to protect
 
     public $timestamps = false;
+
+    public function planes()
+{
+    return $this->belongsTo('App\Models\PlanEstudio','plan_estudio_id');
+}
 }

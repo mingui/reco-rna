@@ -30,7 +30,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => '<b>Reco</b>RNA',
 
     'logo_mini' => '<b>A</b>LT',
 

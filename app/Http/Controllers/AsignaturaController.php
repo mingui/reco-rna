@@ -23,7 +23,7 @@ class AsignaturaController extends Controller
 
 
         $title = $this->module;
-        $data = Asignatura::orderBy('nombre')->paginate($this->pag);
+        $data = Asignatura::orderBy('plan_estudio_id')->paginate($this->pag);
         $ruta = $this->route;
 
         return view($this->folder.'.index', compact('title', 'data', 'ruta', 'request'));
