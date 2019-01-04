@@ -26,7 +26,7 @@ Route::resource('/asignatura', 'AsignaturaController');
 Route::resource('/contenido', 'ContenidoController');
 Route::resource('/bibliografia', 'BibliografiaController');
 Route::resource('/bibliografia_contenido', 'Bibliografia_contenidoController');
-
+Route::resource('/asignatura_contenido', 'Asignatura_contenidoController');
 
 
 

@@ -138,6 +138,11 @@ return [
             'text'        => 'Bibliografia/Contenido',
             'url'         => 'bibliografia_contenido',
             'icon'        => 'file'
+        ],
+        [
+            'text'        => 'Asignatura/Contenido',
+            'url'         => 'asignatura_contenido',
+            'icon'        => 'file'
         ]
         
     ],
