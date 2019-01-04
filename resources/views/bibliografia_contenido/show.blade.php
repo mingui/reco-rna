@@ -24,14 +24,24 @@
         <div class="box-body">
             {{ Form::model($data, ['route' => [$ruta.'.update', $data->id], 'method' => 'delete']) }}
 
-            <div class="form-group col-xs-5">
-                {!!Form::label('Borrar este registro')!!}
-                {!!Form::text('nombre',null,['id'=>'contenido_id','class'=>'form-control ', 'required'])!!}
+
+            <div class="form-group col-xs-6">
+            {!!Form::label('Libro')!!}
+                {!! Form::select('bibliografia_id', $titulo, null, ['class'=> 'form-control'])  !!}
             </div>
 
 
+            <div class="form-group col-xs-6">
+            {!!Form::label('Tema')!!}
+                {!! Form::select('contenido_id', $tema, null, ['class'=> 'form-control'])  !!}
+            </div>
+
+        
+
+
+
             <div class="clearfix"></div>
-            {!!Form::submit('Guardar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
+            {!!Form::submit('Eliminar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
             {!! Form::close() !!}
         </div>
 

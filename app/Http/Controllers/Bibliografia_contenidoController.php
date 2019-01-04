@@ -64,7 +64,10 @@ class Bibliografia_contenidoController extends Controller
         $title = $this->module .' Eliminar';
         $ruta = $this->route;
         $data = Bibliografia_contenido::Find($id);
-        return view($this->folder.".show", compact('data', 'title', 'modulo', 'ruta'));
+        $titulo = Bibliografia::pluck('titulo as name', 'id');
+        $tema = Contenido::pluck('tema as name', 'id');
+
+        return view($this->folder.'.show', compact('title', 'data', 'ruta', 'request', 'titulo', 'tema'));
     }
 
 
