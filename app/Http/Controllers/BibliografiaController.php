@@ -23,12 +23,13 @@ class BibliografiaController extends Controller
 
 
         $title = $this->module;
-        $data = Bibliografia::orderBy('titulo')->paginate($this->pag);
+        $data = Bibliografia::orderBy('titulo')
+            ->where('titulo', 'LIKE' , '%'. $request->q ."%")
+            ->paginate($this->pag);
         $ruta = $this->route;
 
         return view($this->folder . '.index', compact('title', 'data', 'ruta', 'request'));
     }
-
 
     public function create()
     {

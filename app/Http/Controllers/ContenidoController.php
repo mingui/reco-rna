@@ -22,7 +22,9 @@ class ContenidoController extends Controller
 
 
         $title = $this->module;
-        $data = Contenido::orderBy('tema')->paginate($this->pag);
+        $data = Contenido::orderBy('tema')
+        ->where('tema', 'LIKE' , "%". $request->q ."%")
+        ->paginate($this->pag);
         $ruta = $this->route;
 
         return view($this->folder . '.index', compact('title', 'data', 'ruta', 'request'));
