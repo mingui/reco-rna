@@ -7,6 +7,7 @@ use App\Models\Bibliografia_contenido;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class Bibliografia_contenidoController extends Controller
 {
@@ -78,8 +79,10 @@ class Bibliografia_contenidoController extends Controller
         $ruta = $this->route;
         $titulo = Bibliografia::pluck('titulo as name', 'id');
         $tema = Contenido::pluck('tema as name', 'id');
+        $temas = Contenido::orderBy('tema')->get();
+         $bibliografia_contenido = Bibliografia_contenido::where('bibliografia_id', $id)->get();
 
-        return view($this->folder.'.edit', compact('title', 'data', 'ruta', 'request', 'titulo', 'tema'));
+        return view($this->folder.'.edit', compact('title', 'data', 'ruta', 'request', 'titulo', 'tema', 'temas', 'bibliografia_contenido'));
     }
 
 
@@ -106,5 +109,20 @@ class Bibliografia_contenidoController extends Controller
         $data->delete();
         session()->flash('success', 'Se ha eliminado correctamente');
         return redirect($this->route);
+    }
+
+
+    public function add($contenido_id, $bibliografia_id){
+        Bibliografia_contenido::insert(
+            ['bibliografia_id' => $bibliografia_id, 'contenido_id' => $contenido_id]
+        );
+        session()->flash('success', 'Iten agregado');
+        return redirect()->back();
+    }
+
+    public function remove($id){
+        Bibliografia_contenido::where('id', $id)->delete();
+        session()->flash('success', 'Iten Eliminado');
+        return redirect()->back();
     }
 }
