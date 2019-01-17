@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 //use DummyFullModelClass;
 use App\Models\Bibliografia;
+use App\Models\Contenido;
+use App\Models\Bibliografia_contenido;
 use Illuminate\Http\Request;
 
 class BibliografiaController extends Controller
@@ -21,10 +23,12 @@ class BibliografiaController extends Controller
     public function index(Request $request)
     {
 
-
+ 
         $title = $this->module;
         $data = Bibliografia::orderBy('titulo')
             ->where('titulo', 'LIKE' , '%'. $request->q ."%")
+            ->orWhere('autor1', 'LIKE' , '%'. $request->q ."%")
+            ->orWhere('autor2', 'LIKE' , '%'. $request->q ."%")
             ->paginate($this->pag);
         $ruta = $this->route;
 
@@ -70,6 +74,7 @@ class BibliografiaController extends Controller
         $title = $this->module;
         $data = Bibliografia::Find($id);
         $ruta = $this->route;
+       
 
         return view($this->folder . '.edit', compact('title', 'data', 'ruta', 'request'));
     }
@@ -99,4 +104,21 @@ class BibliografiaController extends Controller
         session()->flash('success', 'Se ha eliminado correctamente');
         return redirect($this->route);
     }
+
+    public function biblo($id)
+    {
+        $title = $this->module;
+        $data = Bibliografia::Find($id);
+        $ruta = $this->route;
+        $title = $this->module;
+        $data = Bibliografia::Find($id);
+        $ruta = $this->route;
+        $temas = Contenido::orderBy('tema')->get();
+        $bibliografia_contenido = Bibliografia_contenido::where('bibliografia_id', $id)->get();
+
+        return view($this->folder . '.biblo', compact('title', 'data', 'ruta', 'request','temas', 'bibliografia_contenido'));
+    }
+
+
+
 }

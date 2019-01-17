@@ -25,9 +25,13 @@ Route::resource('/plan_estudio', 'PlanEstudioController');
 Route::resource('/asignatura', 'AsignaturaController');
 Route::resource('/contenido', 'ContenidoController');
 Route::resource('/bibliografia', 'BibliografiaController');
+Route::get('/biblo/{id}', 'BibliografiaController@biblo');
+Route::get('/asigc/{id}', 'AsignaturaController@asigc');
 Route::resource('/bibliografia_contenido', 'Bibliografia_contenidoController');
 Route::get('/bibliografia_contenido_add/{contenido_id}/{biblografia_id}', 'Bibliografia_contenidoController@add');
 Route::get('/bibliografia_contenido_remove/{id}', 'Bibliografia_contenidoController@remove');
+Route::get('/asignatura_contenido_add/{contenido_id}/{asignatura_id}', 'Asignatura_contenidoController@add');
+Route::get('/asignatura_contenido_remove/{id}', 'Asignatura_contenidoController@remove');
 Route::resource('/asignatura_contenido', 'Asignatura_contenidoController');
 
 

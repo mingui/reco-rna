@@ -48,8 +48,9 @@
             <div class="clearfix"></div>
             {!!Form::submit('Guardar',['id'=>'guardar','content'=>'<span>Continuar</span>', 'class'=>'btn btn-primary btn-sm'])!!}
             {!! Form::close() !!}
+
         </div>
 
-</div>
+   </div>
 
 @stop

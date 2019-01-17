@@ -18,7 +18,7 @@
 @section('content')
     <div class="box box-default">
         <div class="box-header with-border">
-            <h3 class="box-title">{{ $title }}</h3>
+            <!--<h3 class="box-title">{{ $title }}</h3>-->
             <a href="{{ route($ruta.'.create') }}" class="btn btn-primary  pull-right"><i class="fa fa-plus"></i>Nuevo</a>
         </div>
         <div class="box-body">

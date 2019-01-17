@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Asignatura;
 use App\Models\PlanEstudio;
 use Illuminate\Http\Request;
+use App\Models\Asignatura_contenido;
+use App\Models\Contenido;
 
 class AsignaturaController extends Controller
 {
@@ -101,6 +103,20 @@ class AsignaturaController extends Controller
         $data->delete();
         session()->flash('success', 'Se ha eliminado correctamente');
         return redirect($this->route);
+    }
+    
+
+    public function asigc($id)
+    {
+        $title = $this->module;
+        $data = Asignatura::Find($id);
+        $ruta = $this->route;
+        $plan = PlanEstudio::pluck('plan as name', 'id');
+
+        $temas = Contenido::orderBy('tema')->get();
+        $asignatura_contenido = Asignatura_contenido::where('asignatura_id', $id)->get();
+
+        return view($this->folder . '.asigc', compact('title', 'data', 'ruta', 'request','plan','temas', 'asignatura_contenido'));
     }
 
 
