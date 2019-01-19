@@ -80,7 +80,7 @@ class Bibliografia_contenidoController extends Controller
         $titulo = Bibliografia::pluck('titulo as name', 'id');
         $tema = Contenido::pluck('tema as name', 'id');
         $temas = Contenido::orderBy('tema')->get();
-         $bibliografia_contenido = Bibliografia_contenido::where('bibliografia_id', $id)->get();
+        $bibliografia_contenido = Bibliografia_contenido::where('bibliografia_id', $id)->get();
 
         return view($this->folder.'.edit', compact('title', 'data', 'ruta', 'request', 'titulo', 'tema', 'temas', 'bibliografia_contenido'));
     }
