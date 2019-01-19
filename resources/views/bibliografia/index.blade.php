@@ -18,9 +18,7 @@
 @section('content')
     
     <div class="box box-default">
-        <div class="box-header with-border">
-            <h3 class="box-title">{{ $title }}</h3>
-           
+        <div class="box-header with-border"> 
                @include('includes.inc_buscador')
                <a href="{{ route($ruta.'.create') }}" class="btn btn-primary  pull-right"><i class="fa fa-plus"></i>Nuevo</a>
                <a href="{{ route($ruta.'.index') }}" class="btn btn-default  pull-right"><i class="fa fa-refresh"></i></a>
@@ -34,6 +32,7 @@
                 <th>AUTOR 1</th>
                 <th>AUTOR 2</th>
                 <th>VOLUMEN</th>
+                <th>TEMAS</th>
                 <th width="50px"><i class="fa fa-gear"></i></th>
                 </tr>
 
@@ -45,6 +44,12 @@
                         <td>{{ $file->autor1 }}</td>
                         <td>{{ $file->autor2 }}</td>
                         <td>{{ $file->volumen }}</td>
+                        <td>
+                            <div class="btn-group">
+                            <a href="/biblo/{{$file->id}}" class="fa fa-book"></i> </a>
+                                
+                            </div>
+                        </td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route($ruta.'.edit', $file->id) }}"><i class="fa fa-edit"></i> </a>

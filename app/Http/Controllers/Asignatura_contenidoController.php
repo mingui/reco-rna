@@ -25,7 +25,7 @@ class Asignatura_contenidoController extends Controller
 
 
         $title = $this->module;
-        $data = Asignatura_contenido::orderBy('id')->paginate($this->pag);
+        $data = Asignatura_contenido::orderBy('id','desc')->paginate($this->pag);
         $ruta = $this->route;
 
         return view($this->folder.'.index', compact('title', 'data', 'ruta', 'request'));
@@ -107,4 +107,19 @@ class Asignatura_contenidoController extends Controller
         session()->flash('success', 'Se ha eliminado correctamente');
         return redirect($this->route);
     }
+
+    public function add($contenido_id, $asignatura_id){
+        Asignatura_contenido::insert(
+            ['asignatura_id' => $asignatura_id, 'contenido_id' => $contenido_id]
+        );
+        session()->flash('success', 'Iten agregado');
+        return redirect()->back();
+    }
+
+    public function remove($id){
+        Asignatura_contenido::where('id', $id)->delete();
+        session()->flash('success', 'Iten Eliminado');
+        return redirect()->back();
+    }
+
 }

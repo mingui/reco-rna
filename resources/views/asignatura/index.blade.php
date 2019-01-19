@@ -18,7 +18,7 @@
 @section('content')
     <div class="box box-default">
         <div class="box-header with-border">
-            <h3 class="box-title">{{ $title }}</h3>
+           
                @include('includes.inc_buscador')
                <a href="{{ route($ruta.'.create') }}" class="btn btn-primary  pull-right"><i class="fa fa-plus"></i>Nuevo</a>
                <a href="{{ route($ruta.'.index') }}" class="btn btn-default  pull-right"><i class="fa fa-refresh"></i></a>
@@ -31,6 +31,7 @@
                 <th>NOMBRE</th>
                 <th>SEMESTRE</th>
                 <th>PLAN DE ESTUDIO</th>
+                <th>TEMAS</th>
                 <th width="50px"><i class="fa fa-gear"></i></th>
                 </tr>
 
@@ -41,6 +42,12 @@
                         <td>{{ $file->nombre }}</td>
                         <td>{{ $file->semestre }}</td>
                         <td>{{ $file->planes->plan }}</td>
+                        <td>
+                            <div class="btn-group">
+                            <a href="/asigc/{{$file->id}}" class="fa fa-book"></i> </a>
+                                
+                            </div>
+                        </td>
                         <td>
                             <div class="btn-group">
                                 <a href="{{ route($ruta.'.edit', $file->id) }}"><i class="fa fa-edit"></i> </a>
