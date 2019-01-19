@@ -17,7 +17,8 @@ class CreateUserLibrosTable extends Migration
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('libro_id');
-            $table->boolean('calificado');
+            $table->integer('busqueda_id');
+            $table->boolean('calificado')->default(false);
             $table->timestamps();
         });
     }

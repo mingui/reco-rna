@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Busquedas;
+use App\Models\UserLibros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,11 @@ class SiteController extends Controller
         $busqueda_id = 0;
         if($request->q != ''){
             $busqueda_id = $this->guardar_busqueda($request, null, null);
+            if( $busqueda_id > 0){
+               // session()->set('busqueda_id', $busqueda_id);
+                session()->put('busqueda_id', $busqueda_id);
+            }
+
         }
 
 
@@ -67,7 +73,7 @@ class SiteController extends Controller
         $actual = Busquedas::where('user_id', Auth::user()->id)
                             ->where('tema', $request->q)
                             ->whereBetween('created_at', [ date('Y-m-d'). ' 00:00:00', date('Y-m-d'). ' 23:59:59'   ])
-                            ->count();
+                            ->first();
 
         if(!$actual > 0){
             $data = new Busquedas();
@@ -77,7 +83,7 @@ class SiteController extends Controller
             return $data->id;
         }
 
-        return 0;
+        return  $actual->id;
 
     }
 
@@ -87,11 +93,16 @@ class SiteController extends Controller
 
     public function calificar(Request $request){
 
+
+
         $data = Busquedas::Find($request->busqueda_id);
         $data->libro_id = $request->libro_id;
         $data->ranking    = $request->ranking;
         if($data->save()){
             session()->flash('success', 'Gracias por tu calificacion :)');
+            UserLibros::where('id', $request->user_libro_id)
+                ->update(['calificado' => 1]);
+
 
         }
 
@@ -164,7 +175,36 @@ class SiteController extends Controller
 
 
 
-}
+    }
+
+
+    public function libro_add(Request $request){
+
+       // return $request->all();
+
+       $data = UserLibros::firstOrCreate(
+            ['libro_id' => $request->libro_id, 'busqueda_id' => $request->busqueda_id, 'user_id' => auth()->user()->id ]
+        );
+
+        if($data){
+            session()->flash('success', 'Agregado a su lista');
+        } else {
+            session()->flash('warning', 'El libro ya esta en tu lista');
+        }
+
+        return redirect()->back();
+
+
+    }
+
+
+
+    public function libros_user(Request $request){
+        $title = 'Biblioteca';
+        $data = UserLibros::where('user_id', auth()->user()->id)->paginate(25);
+
+        return view('libro_user', compact('data', 'title', 'request', 'busqueda_id'));
+    }
 
 
 }

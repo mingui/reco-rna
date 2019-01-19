@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Models\Bibliografia;
 use App\Models\Contenido;
 use App\Models\Bibliografia_contenido;
+use App\Models\UserLibros;
 use Illuminate\Http\Request;
 
 class BibliografiaController extends Controller
@@ -118,6 +119,11 @@ class BibliografiaController extends Controller
 
         return view($this->folder . '.biblo', compact('title', 'data', 'ruta', 'request','temas', 'bibliografia_contenido'));
     }
+
+
+
+
+
 
 
 

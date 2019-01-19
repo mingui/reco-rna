@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="es">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,6 +9,7 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/vendor/adminlte/vendor/font-awesome/css/font-awesome.min.css">
 
         <!-- Styles -->
         <style>
@@ -69,7 +70,9 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                        <a href="{{ url('/home') }}">Admin</a>
+                    <a href="{{ url('/') }}">Biblioteca</a>
+                    <a href="{{ url('/libros_user') }}">Mis libros</a>
+                    <a href="{{ url('/home') }}">Admin</a>
                     @else
                         <a href="{{ route('login') }}">Login</a>
 
@@ -94,19 +97,21 @@
                     {{--<a href="https://forge.laravel.com">Forge</a>--}}
                     {{--<a href="https://github.com/laravel/laravel">GitHub</a>--}}
                 {{--</div>--}}
-
+                @if(auth()->user())
                 <div class="col">
                     <form method="get">
                         <div class="form-group">
                             <label for="Buscar libro">Buscar libro </label>
                             <input type="text" name="q" value="{{ $request->q }}" required class="form-control col-12">
                             <br>
+
                             <button type="submit" class="btn btn-primary pull-right">Buscar</button>
                             <a href="/"  class="btn btn-primary pull-right">Limpiar</a>
                         </div>
                     </form>
                     @include('alert')
                 </div>
+                @endif
 
 
 
@@ -119,7 +124,7 @@
                            <th>Autor(es)</th>
                            <th>Volumen</th>
                            <th>Calif. media</th>
-                           <th>Calificar</th>
+                           <th>Acciones</th>
                        </tr>
                        </thead>
 
@@ -127,28 +132,34 @@
                             @foreach($data as $file)
                                 <tr>
                                     <td>{{ $file->id }}</td>
-                                    <td>{{ $file->titulo }}</td>
+                                    <td>{{ $file->titulo }}
+
+                                    </td>
                                     <td>{{ $file->autor1 }} {{ $file->autor2 }}</td>
                                     <td width="10px text-center">{{ $file->volumen }}</td>
                                     <td width="10px text-center">
                                         {{ get_ranking_medio($file->id) }}
+
                                     </td>
                                     <td width="30px text-center">
-                                        @if($busqueda_id > 0)
-                                        {!! Form::open(['route'=>'calificar', 'method'=>'POST']) !!}
-                                        <input type="hidden" value="{{ $file->id }}" name="libro_id">
-                                        <input type="hidden" value="{{ $busqueda_id }}" name="busqueda_id">
-
-
-                                        <select name="ranking" id="ranking">
-                                            @for($i=1; $i<=5; $i++)
-                                                <option onchange="submit.this()"  value="{{$i}}">{{$i}}</option>
-                                            @endfor
-                                        </select>
-                                        <button type="submit" class="btn btn-primary btn-sm">Cal</button>
-
-                                        {!! Form::close() !!}
+                                        @if(auth()->user())
+                                        @if(in_array($file->id, userLibrosInArray()))
+                                            <button  class="btn btn-success btn-sm disabled"><i class="fa fa-heart"></i></button>
+                                        @else
+                                            @if(session()->get('busqueda_id') > 0 && $request->q)
+                                                {!! Form::open(['route'=>'libro_add', 'method'=>'GET']) !!}
+                                                <input type="hidden" value="{{ $file->id }}" name="libro_id">
+                                                <input type="hidden" value="{{ session()->get('busqueda_id') }}" name="busqueda_id">
+                                                <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-heart"></i></button>
+                                                {!! Form::close() !!}
+                                            @endif
                                         @endif
+                                        @endif
+
+
+
+
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -156,7 +167,7 @@
 
                     </table>
                     <div class="text-center">
-                        {!! $data->links()  !!}
+                        {!! $data->appends(Request::input())->links() !!}
                     </div>
                 </div>
             </div>
