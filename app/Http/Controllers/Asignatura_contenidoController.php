@@ -27,7 +27,7 @@ class Asignatura_contenidoController extends Controller
         $title = $this->module;
         $data = Asignatura_contenido::orderBy('id','desc')->paginate($this->pag);
         $ruta = $this->route;
-
+        
         return view($this->folder.'.index', compact('title', 'data', 'ruta', 'request'));
     }
 
