@@ -18,13 +18,10 @@
 @section('content')
 <div class="box box-default">
         <div class="box-header with-border">
-<<<<<<< Updated upstream
-          
-            <a href="{{ route($ruta.'.create') }}" class="btn btn-primary  pull-right"><i class="fa fa-plus"></i>Nuevo</a>
-=======
-            <h3 class="box-title">{{ $title }}</h3>
+
+            <!--<h3 class="box-title">{{ $title }}</h3>-->
             
->>>>>>> Stashed changes
+
                @include('includes.inc_buscador')
                <a href="{{ route($ruta.'.create') }}" class="btn btn-primary  pull-right"><i class="fa fa-plus"></i>Nuevo</a>
                <a href="{{ route($ruta.'.index') }}" class="btn btn-default  pull-right"><i class="fa fa-refresh"></i></a>
