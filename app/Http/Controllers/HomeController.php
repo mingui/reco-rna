@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Busquedas;
+use App\Models\Bibliografia;
 
 class HomeController extends Controller
 {
@@ -23,7 +25,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        //  $salida = executar_python();   
+        //  foreach($salida as $file){
+        //      echo $file . '<br>';
+        //  }
+
+    
+        
+       return view('home');
     }
 
 
