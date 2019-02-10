@@ -25,14 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //  $salida = executar_python();   
-        //  foreach($salida as $file){
-        //      echo $file . '<br>';
-        //  }
+          $salida = executar_python();   
+          foreach($salida as $file){
+              //echo $file . '<br>';
+              var_dump($file);
+          }
 
     
         
-       return view('home');
+      // return view('home');
     }
 
 

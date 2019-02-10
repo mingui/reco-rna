@@ -129,6 +129,56 @@
                        </thead>
 
                         <tbody>
+
+                        @if(auth()->user())
+                        <tr>
+                            <th colspan="6">
+                                <h2 class="text-center">Recomendados</h2>
+                            </th>
+                        </tr>
+                        @foreach(retornarSugerencias() as $file)
+                        <tr class="alert-success">
+                                    <td>{{ $file[1] }}</td>
+                                    <td>{{ getLibroData($file[1])->titulo }}
+
+                                    <span class="label alert-success pull-right">{{ number_format($file[2], 2) }}</span>
+
+                                    </td>
+                                    <td>{{ getLibroData($file[1])->autor1 }} {{ getLibroData($file[1])->autor2 }}</td>
+                                    <td width="10px text-center">{{ getLibroData($file[1])->volumen }}</td>
+                                    <td width="10px text-center">
+                                        {{ get_ranking_medio($file[1]) }}
+
+                                    </td>
+                                    <td width="30px text-center">
+                                        @if(auth()->user())
+                                        @if(in_array($file[1], userLibrosInArray()))
+                                            <button  class="btn btn-success btn-sm disabled"><i class="fa fa-heart"></i></button>
+                                        @else
+                                            @if(session()->get('busqueda_id') > 0 && $request->q)
+                                                {!! Form::open(['route'=>'libro_add', 'method'=>'GET']) !!}
+                                                <input type="hidden" value="{{ $file->id }}" name="libro_id">
+                                                <input type="hidden" value="{{ session()->get('busqueda_id') }}" name="busqueda_id">
+                                                <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-heart"></i></button>
+                                                {!! Form::close() !!}
+                                            @endif
+                                        @endif
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                           @endif 
+
+
+
+                           <tr>
+                            <th colspan="6">
+                                <h2 class="text-center">Resultado</h2>
+                            </th>
+                        </tr>
+
+
+
                             @foreach($data as $file)
                                 <tr>
                                     <td>{{ $file->id }}</td>
@@ -163,6 +213,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+
+
+
+
+
+
                         </tbody>
 
                     </table>

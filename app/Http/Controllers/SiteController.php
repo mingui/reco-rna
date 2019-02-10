@@ -21,6 +21,14 @@ class SiteController extends Controller
 
         $title = 'Biblioteca';
         $data = $this->filtro($request);
+      
+
+
+// foreach($datapy as $row){
+//     var_dump($row);
+//     echo '<hr>';
+// }
+
         $busqueda_id = 0;
         if($request->q != ''){
             $busqueda_id = $this->guardar_busqueda($request, null, null);
@@ -43,6 +51,7 @@ class SiteController extends Controller
     public function filtro($request){
 
         $data = DB::table('bibliografia')
+
 //            ->leftJoin('product_category', 'product_category.product_id', '=', 'product.id')
 
             ->where(function ($query) use ($request)
@@ -61,6 +70,7 @@ class SiteController extends Controller
            // ->groupBy('product.id')
             ->orderBy('titulo')
             ->paginate(30);
+//var_dump($data);                  
         return $data;
 
 

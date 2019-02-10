@@ -1,15 +1,28 @@
-#Tensorflow library. Used to implement machine learning models
 import tensorflow as tf
-#Numpy contains helpful functions for efficient mathematical calculations
 import numpy as np
-#Dataframe manipulation library
 import pandas as pd
+import pymysql
 import os
+import sys
 
-libros_df = pd.read_csv('data/bibliografia2.csv', sep=',', header=None)
+#usuario_id = sys.argv[1]
+
+usuario_id = 5
+
+mysql_connection = pymysql.connect(host='localhost',
+                    user='root',
+                    password='',
+                    db='libros',
+                    charset='utf8',
+                    cursorclass=pymysql.cursors.DictCursor)
+                    
+sql1 = "SELECT * FROM `bibliografia`"
+#sql2 = "SELECT * FROM `user_libros`"
+libros_df = pd.read_sql(sql1, mysql_connection)
+#ratings_df = pd.read_sql(sql2, mysql_connection)
 #print (libros_df.head(5))
 
-ratings_df = pd.read_csv('data/ratings.dat', sep='::', header=None)
+ratings_df = pd.read_csv('data/ratings.dat', sep='::', header=None, engine='python')
 #print (ratings_df.head(5))
 
 libros_df.columns = ['bibliografiaID', 'Title', 'Autor1','Autor2','Volumen']
@@ -127,14 +140,16 @@ scored_libros_df_75["Recommendation Score"] = rec[0]
 #Se encuentra el id del usuario de prueba
 merged_df.iloc[75]
 
+
 #encontrar los libros que el usuario leyó
-libros_df_75 = merged_df[merged_df['UserID']==1]
+libros_df_75 = merged_df[merged_df['UserID']==usuario_id]
 #libros_df_75.head()
 
 #combinar libros_df con ratings_df por bibliografiaID
 merged_df_75 = scored_libros_df_75.merge(libros_df_75, on='bibliografiaID', how='outer')
 #borrar columnas innecesarias
-merged_df_75 = merged_df_75.drop('List Index_y', axis=1).drop('UserID', axis=1).drop('Title_y', axis=1).drop('Autor1_y', axis=1).drop('Autor2_y', axis=1).drop('Volumen_y', axis=1)
+merged_df_75 = merged_df_75.drop('List Index_y', axis=1).drop(['UserID','Rating','Title_x','Autor1_x','Autor2_x','Volumen_x','List Index_x'], axis=1).drop('Title_y', axis=1).drop('Autor1_y', axis=1).drop('Autor2_y', axis=1).drop('Volumen_y', axis=1)
 
 
-print (merged_df_75.sort_values(["Recommendation Score"], ascending=False).head(20))
+rec = merged_df_75.sort_values(["Recommendation Score"], ascending=False).head(20)
+print (rec)

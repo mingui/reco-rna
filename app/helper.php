@@ -50,7 +50,35 @@ function crear_datos_bibiografia(){
 function executar_python(){
     $salida= array(); //recogerá los datos que nos muestre el script de Python
  
-    $data = exec("python  libros.py", $salida);
+    $data = exec("python  libros.py 5", $salida);
   
    return $salida;
+}
+
+
+function retornarSugerencias(){
+
+    $datapy = executar_python();
+    $my_array = array();
+        foreach($datapy as $file){
+            
+              $my_array[] = preg_replace('/[ ]{2,}|[\t]/', '|', trim($file));
+          }
+       
+         $arr = array();
+         $arr2 = array();   
+        foreach($my_array as $file){
+           
+            $arr  = explode('|', $file);
+            if(count($arr) > 2){
+                $arr2[] = $arr; 
+            // echo 'Valor 1:' .  getNombreLibro($arr[]);
+            // echo '<hr>';
+            }
+            
+           
+            
+        }
+
+        return $arr2;
 }
