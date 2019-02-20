@@ -37,6 +37,6 @@ Route::resource('/asignatura_contenido', 'Asignatura_contenidoController');
 
 Route::get('/libro_add', 'SiteController@libro_add')->name('libro_add');
 Route::get('/libros_user', 'SiteController@libros_user')->name('libros_user');
-
+Route::get('/recomendados', 'SiteController@recomendados')->name('recomendados');
 
 

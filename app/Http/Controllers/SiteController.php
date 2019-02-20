@@ -217,5 +217,11 @@ class SiteController extends Controller
         return view('libro_user', compact('data', 'title', 'request', 'busqueda_id'));
     }
 
+    public function recomendados(Request $request){
+        $title = 'Recomendados';
+       
+
+        return view('recomendados',compact('title'));
+    }
 
 }
