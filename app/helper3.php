@@ -18,6 +18,12 @@ function getLibroData($id){
     return false;
 }
 
+function getUsuario(){
+    $data = auth()->user()->id;
+
+    return $data;
+}
+
 function getNombreLibro($id){
     if($id > 0){
         $data = \App\Models\Bibliografia::Find($id);

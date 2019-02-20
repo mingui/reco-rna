@@ -70,9 +70,11 @@
             @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
-                    <a href="{{ url('/') }}">Biblioteca</a>
                     <a href="{{ url('/libros_user') }}">Mis libros</a>
+                    <a href="{{ url('/home') }}">Recomendados</a>
                     <a href="{{ url('/home') }}">Admin</a>
+                  
+
                     @else
                         <a href="{{ route('login') }}">Login</a>
 

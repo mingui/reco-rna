@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Support\Facades\Auth;
 
 function get_ranking_medio($libro_id){
    $data = \App\Models\Busquedas::where('libro_id', $libro_id)->avg('ranking');
@@ -49,8 +49,9 @@ function crear_datos_bibiografia(){
 
 function executar_python(){
     $salida= array(); //recogerá los datos que nos muestre el script de Python
- 
-    $data = exec("python  libros.py 5", $salida);
+    $id = Auth::id();
+    //dd($id);
+    $data = exec("python  libros.py $id", $salida);
   
    return $salida;
 }

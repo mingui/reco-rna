@@ -7,7 +7,13 @@ import sys
 
 #usuario_id = sys.argv[1]
 
-usuario_id = 5
+#usuario_id = 5
+
+from sys import argv
+
+script, usuario_id = argv
+usuario_id = list(map(int,usuario_id))
+print (usuario_id)
 
 mysql_connection = pymysql.connect(host='localhost',
                     user='root',
