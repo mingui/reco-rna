@@ -5,15 +5,15 @@ import pymysql
 import os
 import sys
 
-#usuario_id = sys.argv[1]
 
-#usuario_id = 5
 
 from sys import argv
 
 script, usuario_id = argv
-usuario_id = list(map(int,usuario_id))
-print (usuario_id)
+#usuario_id = list(map(int,usuario_id))
+usuario_id = int(usuario_id)
+#usuario_id = 1
+#print (usuario_id)
 
 mysql_connection = pymysql.connect(host='localhost',
                     user='root',
@@ -23,59 +23,39 @@ mysql_connection = pymysql.connect(host='localhost',
                     cursorclass=pymysql.cursors.DictCursor)
                     
 sql1 = "SELECT * FROM `bibliografia`"
-#sql2 = "SELECT * FROM `user_libros`"
+sql2 = "SELECT * FROM `user_libros`"
 libros_df = pd.read_sql(sql1, mysql_connection)
-#ratings_df = pd.read_sql(sql2, mysql_connection)
+ratings_df = pd.read_sql(sql2, mysql_connection)
 #print (libros_df.head(5))
 
-ratings_df = pd.read_csv('data/ratings.dat', sep='::', header=None, engine='python')
+#ratings_df = pd.read_csv(r'data/ratings.dat', sep='::', header=None, engine='python')
 #print (ratings_df.head(5))
 
 libros_df.columns = ['bibliografiaID', 'Title', 'Autor1','Autor2','Volumen']
-ratings_df.columns = ['UserID', 'bibliografiaID', 'Rating', 'Timestamp']
-
-#print (len(libros_df))
-
-libros_df['List Index'] = libros_df.index
-
-#unir tablas
-merged_df = libros_df.merge(ratings_df, on='bibliografiaID')
+#ratings_df.columns = ['UserID', 'bibliografiaID', 'Rating', 'Timestamp']
+ratings_df.columns = ['ID','UserID','bibliografiaID','busquedaID', 'Rating', 'Creado','Modificado']
 #Dropping unecessary columns
-merged_df = merged_df.drop('Timestamp', axis=1)
+ratings_df = ratings_df.drop(['ID','busquedaID','Creado','Modificado'], axis=1)
+#print (ratings_df.head(5))
 
-#Agrupar por UserID
-userGroup = merged_df.groupby('UserID')
-#print (userGroup.first().head()) 
 
-#cantidad de usuarios para entrenar red
-amountOfUsedUsers = 1000
-#creando lista de entrenamiento
-trX = []
-#por cada usuario en el grupo
-for userID, curUser in userGroup:
-    #crear un temp que guarda cada valoracion de libro
-    temp = [0]*len(libros_df)
-    #por cada libro en la lista de libros curUser's
-    for num, libros in curUser.iterrows():
-        #Dividir la valoracion por 5 y guardarla
-        temp[libros['List Index']] = libros['Rating']/5.0
-    # Agregar la lista de valoracion en la lista de entrenamiento
-    trX.append(temp)
-    # revisar para ver si se termino de agregar la cantidad de usuarios para entrenar
-    if amountOfUsedUsers == 0:
-        break
-    amountOfUsedUsers -= 1
+user_rating_df = ratings_df.pivot(index='UserID', columns='bibliografiaID', values='Rating')
+#print (user_rating_df.head())
 
+norm_user_rating_df = user_rating_df.fillna(0) / 5.0
+trX = norm_user_rating_df.values
+#print (trX[0:5])
 
 hiddenUnits = 20
-visibleUnits = len(libros_df)
-vb = tf.placeholder("float", [visibleUnits]) #Number of unique movies
+visibleUnits =  len(user_rating_df.columns)
+vb = tf.placeholder("float", [visibleUnits]) #Cantidad de libros unicos
 hb = tf.placeholder("float", [hiddenUnits]) #Number of features we're going to learn
 W = tf.placeholder("float", [visibleUnits, hiddenUnits])
 
+
 #Phase 1: Input Processing
 v0 = tf.placeholder("float", [None, visibleUnits])
-_h0= tf.nn.sigmoid(tf.matmul(v0, W) + hb)
+_h0 = tf.nn.sigmoid(tf.matmul(v0, W) + hb)
 h0 = tf.nn.relu(tf.sign(_h0 - tf.random_uniform(tf.shape(_h0))))
 #Phase 2: Reconstruction
 _v1 = tf.nn.sigmoid(tf.matmul(h0, tf.transpose(W)) + vb) 
@@ -94,8 +74,11 @@ update_w = W + alpha * CD
 update_vb = vb + alpha * tf.reduce_mean(v0 - v1, 0)
 update_hb = hb + alpha * tf.reduce_mean(h0 - h1, 0)
 
+
 err = v0 - v1
 err_sum = tf.reduce_mean(err * err)
+
+
 
 #Current weight
 cur_w = np.zeros([visibleUnits, hiddenUnits], np.float32)
@@ -123,39 +106,38 @@ for i in range(epochs):
         cur_nb = sess.run(update_hb, feed_dict={v0: batch, W: prv_w, vb: prv_vb, hb: prv_hb})
         prv_w = cur_w
         prv_vb = cur_vb
-        prv_hb = cur_nb
-    errors.append(sess.run(err_sum, feed_dict={v0: trX, W: cur_w, vb: cur_vb, hb: cur_nb}))
-    #print (errors[-1])
+        prv_hb = cur_hb
+    errors.append(sess.run(err_sum, feed_dict={v0: trX, W: cur_w, vb: cur_vb, hb: cur_hb}))
+   # print (errors[-1])
 
 
-    #Seleccionando el usuario de entrada
-inputUser = [trX[75]]
+#Seleccionando el usuario de entrada
+mock_user_id = usuario_id
+inputUser = trX[mock_user_id-1].reshape(1, -1)
+#print (inputUser[0:5])
+
 #Alimentar el usuario de entrada y reconstruir la entrada
 hh0 = tf.nn.sigmoid(tf.matmul(v0, W) + hb)
 vv1 = tf.nn.sigmoid(tf.matmul(hh0, tf.transpose(W)) + vb)
 feed = sess.run(hh0, feed_dict={ v0: inputUser, W: prv_w, hb: prv_hb})
 rec = sess.run(vv1, feed_dict={ hh0: feed, W: prv_w, vb: prv_vb})
+#print(rec)
+
 
 #Se recomiendan 20 libros a nuestro usuario de prueba clasificándolos por sus puntajes proporcionados por nuestro modelo.
-scored_libros_df_75 = libros_df
-scored_libros_df_75["Recommendation Score"] = rec[0]
-#print (scored_libros_df_75.sort_values(["Recommendation Score"], ascending=False).head(20))
+scored_libros_df_mock = libros_df[libros_df['bibliografiaID'].isin(user_rating_df.columns)]
+scored_libros_df_mock = scored_libros_df_mock.assign(RecommendationScore = rec[0])
+#print (scored_libros_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20))
 
-
-#Para recomendar libros que el usuario no ha leido:
-#Se encuentra el id del usuario de prueba
-merged_df.iloc[75]
-
-
-#encontrar los libros que el usuario leyó
-libros_df_75 = merged_df[merged_df['UserID']==usuario_id]
-#libros_df_75.head()
+libros_df_mock = ratings_df[ratings_df['UserID'] == mock_user_id]
 
 #combinar libros_df con ratings_df por bibliografiaID
-merged_df_75 = scored_libros_df_75.merge(libros_df_75, on='bibliografiaID', how='outer')
+merged_df_mock = scored_libros_df_mock.merge(libros_df_mock, on='bibliografiaID', how='outer')
+
 #borrar columnas innecesarias
-merged_df_75 = merged_df_75.drop('List Index_y', axis=1).drop(['UserID','Rating','Title_x','Autor1_x','Autor2_x','Volumen_x','List Index_x'], axis=1).drop('Title_y', axis=1).drop('Autor1_y', axis=1).drop('Autor2_y', axis=1).drop('Volumen_y', axis=1)
+merged_df_mock = merged_df_mock.drop('Title', axis=1).drop(['UserID','Rating','Autor1','Autor2','Volumen',], axis=1)
 
 
-rec = merged_df_75.sort_values(["Recommendation Score"], ascending=False).head(20)
+rec = merged_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20)
 print (rec)
+#print (merged_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20))
