@@ -82,11 +82,46 @@
                     @endauth
                 </div>
             @endif
+
+
+            @guest
+                            
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                 
+                                </li>
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+
+
+
+
+
 </div>
         <div class="container">
             <div class="content">
                 <div class="title m-b-md">
                    Biblioteca
+                   <h2>Facultad Politecnica</h2>
+                   <h3>UNE</h3>
                 </div>
 
                 {{--<div class="links">--}}
@@ -97,6 +132,9 @@
                     {{--<a href="https://forge.laravel.com">Forge</a>--}}
                     {{--<a href="https://github.com/laravel/laravel">GitHub</a>--}}
                 {{--</div>--}}
+
+
+
                 @if(auth()->user())
                 <div class="col">
                     <form method="get">
@@ -110,12 +148,9 @@
                         </div>
                     </form>
                     @include('alert')
-                </div>
-                @endif
-
-
-
-                <div class="text-left">
+                    
+                    @if (isset($request->q))
+                    <div class="text-left">
                     <table class="table table-striped table-hover" width="100%">
                        <thead>
                        <tr>
@@ -130,12 +165,72 @@
 
                         <tbody>
 
+                            @foreach($data as $file)
+                                <tr>
+                                    <td>{{ $file->id }}</td>
+                                    <td>{{ $file->titulo }}
+
+                                    </td>
+                                    <td>{{ $file->autor1 }} {{ $file->autor2 }}</td>
+                                    <td width="10px text-center">{{ $file->volumen }}</td>
+                                    <td width="10px text-center">
+                                        {{ get_ranking_medio($file->id) }}
+
+                                    </td>
+                                    <td width="30px text-center">
+                                        @if(auth()->user())
+                                        @if(in_array($file->id, userLibrosInArray()))
+                                            <button  class="btn btn-success btn-sm disabled"><i class="fa fa-heart"></i></button>
+                                        @else
+                                            @if(session()->get('busqueda_id') > 0 && $request->q)
+                                                {!! Form::open(['route'=>'libro_add', 'method'=>'GET']) !!}
+                                                <input type="hidden" value="{{ $file->id }}" name="libro_id">
+                                                <input type="hidden" value="{{ session()->get('busqueda_id') }}" name="busqueda_id">
+                                                <button type="submit" class="btn btn-info btn-sm"><i class="fa fa-heart"></i></button>
+                                                {!! Form::close() !!}
+                                            @endif
+                                        @endif
+                                        @endif
 
 
 
-                        
 
 
+                                    </td>
+                                </tr>
+                            @endforeach
+
+
+
+                        </tbody>
+
+                    </table>
+                    <div class="text-center">
+                        {!! $data->appends(Request::input())->links() !!}
+                    </div>
+                </div>
+                @endif
+
+
+                </div>
+                @endif
+
+
+
+                <!--<div class="text-left">
+                    <table class="table table-striped table-hover" width="100%">
+                       <thead>
+                       <tr>
+                           <th>ID</th>
+                           <th>Titulo</th>
+                           <th>Autor(es)</th>
+                           <th>Volumen</th>
+                           <th>Calif. media</th>
+                           <th>Acciones</th>
+                       </tr>
+                       </thead>
+
+                        <tbody>
 
                             @foreach($data as $file)
                                 <tr>
@@ -183,7 +278,7 @@
                     <div class="text-center">
                         {!! $data->appends(Request::input())->links() !!}
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </body>

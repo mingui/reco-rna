@@ -26,14 +26,17 @@ sql1 = "SELECT * FROM `bibliografia`"
 sql2 = "SELECT * FROM `user_libros`"
 libros_df = pd.read_sql(sql1, mysql_connection)
 ratings_df = pd.read_sql(sql2, mysql_connection)
+
 #print (libros_df.head(5))
 
-#ratings_df = pd.read_csv(r'data/ratings.dat', sep='::', header=None, engine='python')
+#ratings_df = pd.read_csv(r'data/busquedas.csv', sep=',', header=None, engine='python')
 #print (ratings_df.head(5))
 
 libros_df.columns = ['bibliografiaID', 'Title', 'Autor1','Autor2','Volumen']
 #ratings_df.columns = ['UserID', 'bibliografiaID', 'Rating', 'Timestamp']
 ratings_df.columns = ['ID','UserID','bibliografiaID','busquedaID', 'Rating', 'Creado','Modificado']
+#ratings_df = ratings_df[np.isfinite(ratings_df['bibliografiaID'])]
+#ratings_df['bibliografiaID'] = ratings_df.bibliografiaID.astype(int)
 #Dropping unecessary columns
 ratings_df = ratings_df.drop(['ID','busquedaID','Creado','Modificado'], axis=1)
 #print (ratings_df.head(5))
@@ -135,9 +138,10 @@ libros_df_mock = ratings_df[ratings_df['UserID'] == mock_user_id]
 merged_df_mock = scored_libros_df_mock.merge(libros_df_mock, on='bibliografiaID', how='outer')
 
 #borrar columnas innecesarias
-merged_df_mock = merged_df_mock.drop('Title', axis=1).drop(['UserID','Rating','Autor1','Autor2','Volumen',], axis=1)
+merged_df_mock = merged_df_mock.drop('Title', axis=1).drop(['UserID','Autor1','Autor2','Volumen',], axis=1)
 
 
-rec = merged_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20)
+rec = merged_df_mock[merged_df_mock["Rating"].isnull()].sort_values(["RecommendationScore"], ascending=False).head(5)
+rec = rec.drop('Rating',axis=1)
 print (rec)
 #print (merged_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20))

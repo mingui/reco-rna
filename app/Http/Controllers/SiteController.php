@@ -98,6 +98,19 @@ class SiteController extends Controller
 
     }
 
+public function store(Request $request)
+    {
+        // return $request->all();
+        $data = new Bibliografia();
+        $data->fill($request->all());
+        if ($data->save()) {
+            session()->flash('success', 'Se ha creado correctamente');
+        } else {
+            session()->flash('danger', 'OPS!!, Algo salio mal, no se pudo guardar el registro');
+        }
+
+        return redirect($this->route);
+    }
 
 
 
@@ -108,11 +121,12 @@ class SiteController extends Controller
 
         $data = Busquedas::Find($request->busqueda_id);
         $data->libro_id = $request->libro_id;
-        $data->ranking    = $request->ranking;
+        $data->ranking = $request->ranking;
+       
         if($data->save()){
             session()->flash('success', 'Gracias por tu calificacion :)');
             UserLibros::where('id', $request->user_libro_id)
-                ->update(['calificado' => 1]);
+                ->update(['calificado'=>$request->ranking]);
 
 
         }
@@ -221,7 +235,7 @@ class SiteController extends Controller
         $title = 'Recomendados';
        
 
-        return view('recomendados',compact('title'));
+        return view('recomendados',compact('title','request'));
     }
 
 }

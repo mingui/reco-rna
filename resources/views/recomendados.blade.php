@@ -95,12 +95,11 @@
             <table class="table table-striped table-hover" width="100%">
                 <thead>
                 <tr>
-
+                    <th>ID</th>
                     <th>Titulo</th>
                     <th>Autor(es)</th>
                     <th>Volumen</th>
                     <th>Calif. media</th>
-                    <th>Tu calificacion</th>
                 </tr>
                 </thead>
 
