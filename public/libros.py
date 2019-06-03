@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 import pymysql
-import os
+#import os
 import sys
 
 
@@ -47,32 +47,38 @@ user_rating_df = ratings_df.pivot(index='UserID', columns='bibliografiaID', valu
 
 norm_user_rating_df = user_rating_df.fillna(0) / 5.0
 trX = norm_user_rating_df.values
+
 #print (trX[0:5])
 
 hiddenUnits = 20
 visibleUnits =  len(user_rating_df.columns)
 vb = tf.placeholder("float", [visibleUnits]) #Cantidad de libros unicos
-hb = tf.placeholder("float", [hiddenUnits]) #Number of features we're going to learn
+hb = tf.placeholder("float", [hiddenUnits]) #Numero de caracteristicas que va aprender
 W = tf.placeholder("float", [visibleUnits, hiddenUnits])
 
 
-#Phase 1: Input Processing
+#Fase 1: Input Processing, Forward Pass
+
 v0 = tf.placeholder("float", [None, visibleUnits])
 _h0 = tf.nn.sigmoid(tf.matmul(v0, W) + hb)
 h0 = tf.nn.relu(tf.sign(_h0 - tf.random_uniform(tf.shape(_h0))))
-#Phase 2: Reconstruction
+
+
+#Fase 2: Reconstruction
+
 _v1 = tf.nn.sigmoid(tf.matmul(h0, tf.transpose(W)) + vb) 
 v1 = tf.nn.relu(tf.sign(_v1 - tf.random_uniform(tf.shape(_v1))))
 h1 = tf.nn.sigmoid(tf.matmul(v1, W) + hb)
 
-#Learning rate
+#Tasa de aprendizaje
 alpha = 1.0
-#Create the gradients
+#Crear gradientes
 w_pos_grad = tf.matmul(tf.transpose(v0), h0)
 w_neg_grad = tf.matmul(tf.transpose(v1), h1)
-#Calculate the Contrastive Divergence to maximize
+#
+#Calcula la Divergencia Contrastiva para maximizar
 CD = (w_pos_grad - w_neg_grad) / tf.to_float(tf.shape(v0)[0])
-#Create methods to update the weights and biases
+#Crear métodos para actualizar los pesos y bias
 update_w = W + alpha * CD
 update_vb = vb + alpha * tf.reduce_mean(v0 - v1, 0)
 update_hb = hb + alpha * tf.reduce_mean(h0 - h1, 0)

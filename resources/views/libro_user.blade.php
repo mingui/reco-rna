@@ -119,12 +119,26 @@
                             <input type="hidden" value="{{ $file->libro_id }}" name="libro_id">
                             <input type="hidden" value="{{ $file->id }}" name="user_libro_id">
                             <input type="hidden" value="{{ $file->busqueda_id }}" name="busqueda_id">
+                           
+                          
+                      
+                         <select name="ranking" id="ranking" onchange="this.form.submit()">
+                         
+  <!--    <option value="1"  {{ old('ranking') == 1 ? 'selected' : '' }}>1 </option>
+    <option value="2" {{ old('ranking') == 2 ? 'selected' : '' }}>2</option>
+    <option value="3" {{ old('ranking') == 3 ? 'selected' : '' }}>3</option>
+</select>-->
+                           
 
-
-                            <select name="ranking" id="ranking">
+                            
                             @for($i=1; $i<=5; $i++)
-                            <option onchange="submit.this()"  value="{{$i}}">{{$i}}</option>
+                            
+                           <option value="{{$i}}" >{{$i}}</option>
+                            
+
+                
                             @endfor
+        
                             </select>
                             <button type="submit" class="btn btn-primary btn-sm">Cal</button>
 

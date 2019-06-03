@@ -101,6 +101,12 @@ class SiteController extends Controller
 public function store(Request $request)
     {
         // return $request->all();
+        
+        // $validatedData = $request->validate([
+        //     'title' => 'required|unique:posts|max:255',
+        //     'ranking' => 'required',
+        // ]);
+
         $data = new Bibliografia();
         $data->fill($request->all());
         if ($data->save()) {
@@ -122,7 +128,7 @@ public function store(Request $request)
         $data = Busquedas::Find($request->busqueda_id);
         $data->libro_id = $request->libro_id;
         $data->ranking = $request->ranking;
-       
+  var_dump($data->ranking);     
         if($data->save()){
             session()->flash('success', 'Gracias por tu calificacion :)');
             UserLibros::where('id', $request->user_libro_id)

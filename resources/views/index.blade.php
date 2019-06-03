@@ -122,6 +122,7 @@
                    Biblioteca
                    <h2>Facultad Politecnica</h2>
                    <h3>UNE</h3>
+                   <!--<img src="/img/poli.png">-->
                 </div>
 
                 {{--<div class="links">--}}
