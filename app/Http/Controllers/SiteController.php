@@ -53,25 +53,15 @@ class SiteController extends Controller
 
         $data = DB::table('bibliografia')
 
-//            ->leftJoin('product_category', 'product_category.product_id', '=', 'product.id')
-
             ->where(function ($query) use ($request)
             {
-
-
                 if ($request->q) {
                     $query->where(DB::raw('CONCAT(titulo, autor1, autor2)'), 'like', '%' .$request->q. '%');
                 }
-
-
-
-
             })
-           // ->select('bibliografia*')
-           // ->groupBy('product.id')
             ->orderBy('titulo')
             ->paginate(30);
-//var_dump($data);                  
+                
         return $data;
 
 
@@ -100,12 +90,7 @@ class SiteController extends Controller
 
 public function store(Request $request)
     {
-        // return $request->all();
         
-        // $validatedData = $request->validate([
-        //     'title' => 'required|unique:posts|max:255',
-        //     'ranking' => 'required',
-        // ]);
 
         $data = new Bibliografia();
         $data->fill($request->all());
@@ -127,8 +112,7 @@ public function store(Request $request)
 
         $data = Busquedas::Find($request->busqueda_id);
         $data->libro_id = $request->libro_id;
-        $data->ranking = $request->ranking;
-  var_dump($data->ranking);     
+        $data->ranking = $request->ranking;    
         if($data->save()){
             session()->flash('success', 'Gracias por tu calificacion :)');
             UserLibros::where('id', $request->user_libro_id)

@@ -9,19 +9,29 @@ import sys
 
 from sys import argv
 
+
 script, usuario_id = argv
-#usuario_id = list(map(int,usuario_id))
+
 usuario_id = int(usuario_id)
 #usuario_id = 1
 #print (usuario_id)
+
+#mysql_connection = pymysql.connect(host='localhost',
+ #                   user='root',
+  #                  password='',
+   #                 db='libros',
+    #                charset='utf8',
+     #               cursorclass= pymysql sudo apt-get install python3-pymysql.cursors.DictCursor)
 
 mysql_connection = pymysql.connect(host='localhost',
                     user='root',
                     password='',
                     db='libros',
-                    charset='utf8',
-                    cursorclass=pymysql.cursors.DictCursor)
-                    
+                    charset='utf8')
+
+cursor = mysql_connection.cursor()
+
+
 sql1 = "SELECT * FROM `bibliografia`"
 sql2 = "SELECT * FROM `user_libros`"
 libros_df = pd.read_sql(sql1, mysql_connection)
@@ -75,10 +85,12 @@ alpha = 1.0
 #Crear gradientes
 w_pos_grad = tf.matmul(tf.transpose(v0), h0)
 w_neg_grad = tf.matmul(tf.transpose(v1), h1)
-#
+
 #Calcula la Divergencia Contrastiva para maximizar
 CD = (w_pos_grad - w_neg_grad) / tf.to_float(tf.shape(v0)[0])
+
 #Crear métodos para actualizar los pesos y bias
+
 update_w = W + alpha * CD
 update_vb = vb + alpha * tf.reduce_mean(v0 - v1, 0)
 update_hb = hb + alpha * tf.reduce_mean(h0 - h1, 0)
@@ -104,7 +116,7 @@ prv_hb = np.zeros([hiddenUnits], np.float32)
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
-epochs = 15
+epochs = 20
 batchsize = 100
 errors = []
 for i in range(epochs):
@@ -117,23 +129,27 @@ for i in range(epochs):
         prv_vb = cur_vb
         prv_hb = cur_hb
     errors.append(sess.run(err_sum, feed_dict={v0: trX, W: cur_w, vb: cur_vb, hb: cur_hb}))
+   
    # print (errors[-1])
 
 
 #Seleccionando el usuario de entrada
 mock_user_id = usuario_id
+
 inputUser = trX[mock_user_id-1].reshape(1, -1)
 #print (inputUser[0:5])
 
 #Alimentar el usuario de entrada y reconstruir la entrada
+
 hh0 = tf.nn.sigmoid(tf.matmul(v0, W) + hb)
 vv1 = tf.nn.sigmoid(tf.matmul(hh0, tf.transpose(W)) + vb)
 feed = sess.run(hh0, feed_dict={ v0: inputUser, W: prv_w, hb: prv_hb})
 rec = sess.run(vv1, feed_dict={ hh0: feed, W: prv_w, vb: prv_vb})
+
 #print(rec)
 
 
-#Se recomiendan 20 libros a nuestro usuario de prueba clasificándolos por sus puntajes proporcionados por nuestro modelo.
+#Se recomiendan 10 libros a nuestro usuario de prueba clasificándolos por sus puntajes proporcionados por nuestro modelo.
 scored_libros_df_mock = libros_df[libros_df['bibliografiaID'].isin(user_rating_df.columns)]
 scored_libros_df_mock = scored_libros_df_mock.assign(RecommendationScore = rec[0])
 #print (scored_libros_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20))
@@ -147,7 +163,7 @@ merged_df_mock = scored_libros_df_mock.merge(libros_df_mock, on='bibliografiaID'
 merged_df_mock = merged_df_mock.drop('Title', axis=1).drop(['UserID','Autor1','Autor2','Volumen',], axis=1)
 
 
-rec = merged_df_mock[merged_df_mock["Rating"].isnull()].sort_values(["RecommendationScore"], ascending=False).head(5)
+rec = merged_df_mock[merged_df_mock["Rating"].isnull()].sort_values(["RecommendationScore"], ascending=False).head(10)
 rec = rec.drop('Rating',axis=1)
 print (rec)
 #print (merged_df_mock.sort_values(["RecommendationScore"], ascending=False).head(20))

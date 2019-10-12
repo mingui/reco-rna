@@ -48,10 +48,10 @@ function crear_datos_bibiografia(){
 
 
 function executar_python(){
-    $salida= array(); //recogerá los datos que nos muestre el script de Python
+    $salida= array(); 
     $id = Auth::id();
-    //dd($id);
-    $data = exec("python  libros.py $id", $salida);
+ 
+    $data = exec("python3  libros.py $id", $salida);
   
    return $salida;
 }

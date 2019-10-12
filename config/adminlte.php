@@ -108,7 +108,7 @@ return [
     */
 
     'menu' => [
-        'MODULES',
+        'MODULOS',
         [
             'text' => 'Blog',
             'url'  => 'admin/blog',
